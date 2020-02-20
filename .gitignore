@@ -2,3 +2,5 @@
 aliyun_ddns.txt
 .DS_Store
 setting.yaml
+.idea
+*.log

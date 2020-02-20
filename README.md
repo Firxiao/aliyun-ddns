@@ -1,15 +1,13 @@
 # 阿里云DNS动态解析
-支持多解析记录
-```
-git clone https://github.com/SNBQT/aliyunddns.git
-```
+- 支持多解析记录
+
 ## 安装 python sdk, pyaml
 ```
 pip install aliyun-python-sdk-alidns pyaml
 ```
 
 ## 修改配置文件 setting.yaml
-```
+```bash
 cp setting.yaml.sample setting.yaml
 vi setting.yaml
 ```
@@ -38,8 +36,7 @@ rc_rr_list: ['www','*.git']
 crontab -e
 ```
 ```
-# Run at every 10th minute
-# */10 * * * * /usr/bin/python /path_to/aliyun_ddns.py >> /path_to/run.log 2>&1
-*/10 * * * * /usr/bin/python /path_to/aliyun_ddns.py /dev/null 1>/dev/null
+# Run at every 10 minute
+*/10 * * * * /usr/bin/python /path_to/aliyun_ddns.py >/dev/null 2>&1
 ```
 

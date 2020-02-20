@@ -1,0 +1,3 @@
+aliyunsdkcore
+PyYAML
+aliyun-python-sdk-alidns
