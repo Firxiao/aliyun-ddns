@@ -29,7 +29,7 @@ rc_rr_list: ['www','*.git']
 
 ## 使用 Docker 
 ```bash
-docker run -d -v $(pwd)/setting.yml:/app/setting.yml:ro firxiao/aliyun-ddns --always
+docker run -d --name aliyun-ddns --restart always -v $(pwd)/setting.yml:/app/setting.yml:ro firxiao/aliyun-ddns 
 ```
 
 ## 手动配置

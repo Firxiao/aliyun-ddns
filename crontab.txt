@@ -1,1 +1,1 @@
-*/30 * * * *  root /usr/bin/python3 /app/aliyun-ddns.py >> /dev/null 2>&1
+*/30 * * * *  /usr/bin/python3 /app/aliyun-ddns.py >> /dev/null 2>&1
