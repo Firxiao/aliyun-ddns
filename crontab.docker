@@ -1,0 +1,2 @@
+# forward logs to docker log
+*/30 * * * *  /usr/bin/python3 /app/aliyun-ddns.py >> /app/docker.log

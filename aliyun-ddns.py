@@ -47,7 +47,16 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %A %H:%M:%S',
     filename=log_file,
     filemode='a')
-
+# define a Handler which writes INFO messages or higher to the sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# set a format which is simpler for console use
+formatter = logging.Formatter(
+    '%(asctime)s  %(filename)s : %(levelname)s  %(message)s')
+# tell the handler to use this format
+console.setFormatter(formatter)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
 for root, dirs, files in os.walk(log_dir):
     for name in files:
         if ".log" in name:
@@ -57,7 +66,6 @@ for root, dirs, files in os.walk(log_dir):
                 os.remove(_log_file)
 
 """
-
 获取域名的解析信息
 """
 
@@ -110,9 +118,10 @@ def update_dns(dns_rr, dns_type, dns_value, dns_record_id, dns_ttl, dns_format):
 通过 myip.ipip.net 获取当前主机的外网IP
 """
 
+
 def get_my_public_ip():
-#    get_ip_method = os.popen('curl -m 30 -s myip.ipip.net')
-#    get_ip_responses = get_ip_method.readlines()[0]
+    #    get_ip_method = os.popen('curl -m 30 -s myip.ipip.net')
+    #    get_ip_responses = get_ip_method.readlines()[0]
     get_ip_method = requests.get('http://myip.ipip.net')
     get_ip_responses = get_ip_method.text
     get_ip_pattern = re.compile(r'\d+\.\d+\.\d+\.\d+')
@@ -123,8 +132,7 @@ def get_my_public_ip():
 if __name__ == '__main__':
     # 获取当前公网的IP
     public_ip = get_my_public_ip()
-    print("公网IP: %s" % public_ip)
-    logging.info("公网IP: %s", public_ip)
+    logging.info("当前公网IP: %s", public_ip)
 
     dns_records = check_records(rc_domain)
     for rc_rr in rc_rr_list:
@@ -134,32 +142,31 @@ if __name__ == '__main__':
         for record in dns_records["DomainRecords"]["Record"]:
             if record["Type"] == 'A' and record["RR"] == rc_rr:
                 record_id = record["RecordId"]
-                # print("%s.%s recordID is %s" % (record["RR"], rc_domain, record_id))
+                logging.debug("%s.%s recordID is %s" %
+                              (record["RR"], rc_domain, record_id))
                 if record_id != "":
                     old_ip = get_old_ip(record_id)
                     break
 
         if record_id == "":
-            print('警告: 在 %s 中未发现 %s, 请先添加!' % (rc_domain, rc_rr))
             logging.warning('警告: 在 %s 中未发现 %s, 请先添加!', rc_domain, rc_rr)
             continue
 
         if old_ip == public_ip:
-            print("域名 %s.%s 的A记录为%s,公网IP未发生改变" % (rc_rr, rc_domain, old_ip ))
-            logging.info("域名 %s.%s 的A记录为%s,公网IP未发生改变", rc_rr, rc_domain, old_ip)
+            logging.info("域名 %s.%s 的A记录为%s,公网IP未发生改变",
+                         rc_rr, rc_domain, old_ip)
         else:
-            print("域名 %s.%s 的A记录为%s,公网IP为%s" % (rc_rr, rc_domain, old_ip, public_ip))
-            logging.info("域名 %s.%s 的A记录为%s,公网IP为%s", rc_rr, rc_domain, old_ip, public_ip)
+            logging.info("域名 %s.%s 的A记录为%s,公网IP为%s", rc_rr,
+                         rc_domain, old_ip, public_ip)
             rc_type = 'a'  # 记录类型, DDNS填写A记录
             rc_value = public_ip  # 新的解析记录值
             rc_record_id = record_id  # 记录ID
             rc_ttl = '1000'  # 解析记录有效生存时间TTL,单位:秒
 
-            update_info = update_dns(rc_rr, rc_type, rc_value, rc_record_id, rc_ttl, rc_format)
+            update_info = update_dns(
+                rc_rr, rc_type, rc_value, rc_record_id, rc_ttl, rc_format)
             logging.info("更新信息: %s", update_info)
             if update_info:
-                print("公网IP更新成功.")
                 logging.info("公网IP更新成功.")
             else:
-                print("公网IP更新失败.")
                 logging.error("公网IP更新失败.")
