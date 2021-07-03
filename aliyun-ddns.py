@@ -44,7 +44,7 @@ log_file = log_dir + "/aliyun-ddns-" + str(today) + ".log"
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s  %(filename)s : %(levelname)s  %(message)s',
-    datefmt='%Y-%m-%d %A %H:%M:%S',
+    datefmt="%Y-%m-%dT%H:%M:%SZ%z",
     filename=log_file,
     filemode='a')
 # define a Handler which writes INFO messages or higher to the sys.stderr
@@ -52,7 +52,7 @@ console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 # set a format which is simpler for console use
 formatter = logging.Formatter(
-    '%(asctime)s  %(filename)s : %(levelname)s  %(message)s')
+    '%(asctime)s  %(filename)s : %(levelname)s  %(message)s', "%Y-%m-%dT%H:%M:%SZ%z")
 # tell the handler to use this format
 console.setFormatter(formatter)
 # add the handler to the root logger
