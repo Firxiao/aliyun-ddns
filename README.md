@@ -1,7 +1,9 @@
 # 阿里云DNS动态解析
 - 支持多解析记录
+- 支持Docker
 
-## 创建配置文件 setting.yml
+## 配置方法
+### 创建配置文件 setting.yml
 ```bash
 cp setting.yml.sample setting.yml
 vi setting.yml
@@ -19,6 +21,14 @@ rc_domain: 'github.com'
 
 # 解析记录
 rc_rr_list: ['www','*.git']
+```
+
+### 使用环境变量
+```
+export ACCESS_KEY_ID="xxxx"
+export ACCESS_KEY_SECRET="xxxxx"
+export RC_DOMAIN="example.com"
+export RC_RR_LIST="foo,bar"
 ```
 
 ## Access Key

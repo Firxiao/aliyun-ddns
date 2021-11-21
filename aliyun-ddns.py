@@ -16,18 +16,24 @@ from aliyunsdkalidns.request.v20150109 import DescribeDomainRecordsRequest
 from aliyunsdkalidns.request.v20150109 import UpdateDomainRecordRequest
 from aliyunsdkcore import client
 
-with open(sys.path[0] + '/setting.yml', 'r') as f:
-    s = yaml.safe_load(f)
-    # print(yaml.dump(s, default_flow_style=False))
+try:
+    with open(sys.path[0] + '/setting.yml', 'r') as f:
+        s = yaml.safe_load(f)
+        # print(yaml.dump(s, default_flow_style=False))
+        # 阿里云 Access Key ID
+        access_key_id = s['access_key_id']
+        # 阿里云 Access Key Secret
+        access_key_secret = s['access_key_secret']
+        # 阿里云 一级域名
+        rc_domain = s['rc_domain']
+        # 解析记录
+        rc_rr_list = s['rc_rr_list']
+except:
+    access_key_id = os.getenv("ACCESS_KEY_ID")
+    access_key_secret = os.getenv("ACCESS_KEY_SECRET")
+    rc_domain = os.getenv("RC_DOMAIN")
+    rc_rr_list = os.getenv("RC_RR_LIST").split(",")
 
-# 阿里云 Access Key ID
-access_key_id = s['access_key_id']
-# 阿里云 Access Key Secret
-access_key_secret = s['access_key_secret']
-# 阿里云 一级域名
-rc_domain = s['rc_domain']
-# 解析记录
-rc_rr_list = s['rc_rr_list']
 # 返回内容格式
 rc_format = 'json'
 # 日志保留天数
